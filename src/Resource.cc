@@ -33,6 +33,7 @@ bool Resource::request(std::string name, long id)
         // リソースが利用可能な場合
         owner = id;         // もしリソースが未使用であれば要求者が利用可能とする
         ownerType = name;   // productまたはaccident
+        checkpoint = simTime();     // リソース確保時刻を記録
         ret_code = true;    // リソース獲得に成功
     }
     else {
@@ -43,7 +44,7 @@ bool Resource::request(std::string name, long id)
                 interruption = owner;   // 前オーナを保存
                 owner = id;             // リソースを横取り
                 ownerType = name;       // accident
-                ret_code = true;        // リソース獲得に成功
+                ret_code = true;        // リソース割り込みに成功
                 setupNode->suspendSetup();          // セットアップを中断する
                 processNode->suspendProduction();   // 生産を中断する
             }
@@ -68,6 +69,7 @@ bool Resource::release(std::string name, long id)
             //　割り込み中でない場合
             owner = 0;                  // リソースを解放
             ownerType = "";
+            proctime.collect(simTime() - checkpoint);     // 経過時間を記録
             setupNode->startSetup();    // 次のセットアップを開始する
         }
         else {
@@ -80,4 +82,10 @@ bool Resource::release(std::string name, long id)
         }
     }
     return ret_code;    // リソース解放できればtrueを戻す
+}
+
+//　ノードの統計情報を表示
+void Resource::finish()
+{
+    EV << "Resouce Utilization: " << proctime.getSum() / simTime() << endl;
 }

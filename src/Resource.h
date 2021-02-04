@@ -13,8 +13,10 @@ private:
     std::string ownerType;
     long owner;
     long interruption;
+    simtime_t checkpoint;
     Await *setupNode;
     Goon *processNode;
+    cStdDev proctime;
 
 protected:
   virtual void initialize();
@@ -22,6 +24,7 @@ protected:
 public:
   virtual bool request(std::string name, long id);
   virtual bool release(std::string name, long id);
+  virtual void finish();
 };
 
 #endif /* RESOURCE_H_ */
