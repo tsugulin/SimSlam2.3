@@ -13,7 +13,7 @@ void Resource::initialize()
     interruption = 0;
     ownerType = "product";
 
-    // リソースのポインタを取得
+    // AwaitノードとGoonノードのポインタを取得
     cModule *mod1 = gate("from_setup")->getPreviousGate()->getOwnerModule();
     setupNode = check_and_cast<Await *>(mod1);
     cModule *mod2 = gate("from_process")->getPreviousGate()->getOwnerModule();
