@@ -20,11 +20,11 @@ private:
 
 protected:
   virtual void initialize();
+  virtual void finish();
 
 public:
   virtual bool request(std::string name, long id);
   virtual bool release(std::string name, long id);
-  virtual void finish();
 };
 
 #endif /* RESOURCE_H_ */
